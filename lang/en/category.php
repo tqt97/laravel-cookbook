@@ -16,7 +16,7 @@ return [
         'description' => 'Description',
         'slug' => 'Slug',
         'position' => 'Position',
-        'is_active' => 'Is Active',
+        'is_active' => 'Status',
         'submit' => 'Submit',
         'select_parent' => 'Select parent',
         'category' => 'Category',
@@ -28,7 +28,7 @@ return [
         'slug' => 'Slug',
         'parent' => 'Parent',
         'position' => 'Position',
-        'is_active' => 'Is Active',
+        'is_active' => 'Status',
         'action' => 'Action',
     ],
     'messages' => [
