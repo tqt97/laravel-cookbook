@@ -10,5 +10,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin.'], 
     Route::resource('categories', CategoryController::class)->except('show');
 
     // post
-    Route::resource('categories', PostController::class)->except('show');
+    Route::get('/posts/{post}/duplicate', [PostController::class, 'duplicate'])->name('posts.duplicate');
+    Route::patch('posts/{post}/restore', [PostController::class, 'restore'])->name('posts.restore')->withTrashed();
+    Route::delete('posts/{post}/force-delete', [PostController::class, 'forceDelete'])
+        ->name('posts.force-delete')->withTrashed();
+    Route::delete('posts/bulk-delete', [PostController::class, 'bulkDelete'])->name('posts.bulk-delete');
+    Route::resource('posts', PostController::class)->except('show');
 });

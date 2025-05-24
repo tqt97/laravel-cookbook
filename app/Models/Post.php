@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Helpers\ImageHelper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
@@ -39,6 +41,20 @@ class Post extends Model
         return 'slug';
     }
 
+    protected static function boot(): void
+    {
+        parent::boot();
+        static::deleting(function (Post $post) {
+            if ($post->isForceDeleting()) {
+                $oldImage = $post->image_path;
+
+                if ($oldImage && ! ImageHelper::delete($oldImage)) {
+                    throw new \RuntimeException("Delete image fail: {$oldImage}");
+                }
+            }
+        });
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -47,6 +63,15 @@ class Post extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the URL of the image associated with this post, or a default
+     * placeholder image if no image is associated.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image_path ? Storage::disk('public')->url($this->image_path) : asset('assets/images/no-image.png');
     }
 
     /**

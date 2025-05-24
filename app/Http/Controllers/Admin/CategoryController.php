@@ -124,7 +124,7 @@ class CategoryController extends Controller
 
         return view('admin.categories.form', [
             'category' => $newCategory,
-            'categoryOptions' => Category::all(),
+            'categoryOptions' => Category::options()->active()->get(),
         ]);
     }
 }
