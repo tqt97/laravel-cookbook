@@ -9,12 +9,14 @@ use App\Http\Requests\Post\StorePostRequest;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Traits\HandlesBulkDeletion;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class PostController extends Controller
 {
@@ -29,6 +31,7 @@ class PostController extends Controller
         $status = $request->input('status');
         $posts = Post::query()
             ->with(['category:id,name', 'user:id,name'])
+            ->withCount('tags')
             ->status($status)
             ->search($search)
             ->latest()
@@ -47,7 +50,8 @@ class PostController extends Controller
     {
         return view('admin.posts.form', [
             'post' => new Post,
-            'categoryOptions' => Category::query()->active()->options()->get(),
+            'categories' => Category::query()->active()->options()->get(),
+            'tags' => Tag::query()->options()->get(),
         ]);
     }
 
@@ -68,11 +72,12 @@ class PostController extends Controller
             }
 
             DB::transaction(function () use ($data) {
-                Post::create($data);
+                $post = Post::create($data);
+                $post->tags()->sync($data['tags']);
             });
 
             return to_route('admin.posts.index')->with('success', __('post.messages.create_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to create post', $th);
 
             return to_route('admin.posts.index')->with('error', __('post.messages.create_fail'));
@@ -86,7 +91,8 @@ class PostController extends Controller
     {
         return view('admin.posts.form', [
             'post' => $post,
-            'categoryOptions' => Category::query()->active()->options()->get(),
+            'categories' => Category::query()->active()->options()->get(),
+            'tags' => Tag::query()->options()->get(),
         ]);
     }
 
@@ -114,6 +120,7 @@ class PostController extends Controller
                 if ($post->isDirty()) {
                     $post->save();
                 }
+                $post->tags()->sync($data['tags']);
 
                 if ($isNewImage && $oldImage) {
                     DB::afterCommit(function () use ($oldImage) {
@@ -125,7 +132,7 @@ class PostController extends Controller
             });
 
             return to_route('admin.posts.index')->with('success', __('post.messages.update_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to update post', $th, [
                 'post_id' => $post->id,
             ]);
@@ -143,7 +150,7 @@ class PostController extends Controller
             $post->delete();
 
             return back()->with('success', __('post.messages.delete_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to delete post', $th, [
                 'post_id' => $post->id,
             ]);
@@ -166,7 +173,7 @@ class PostController extends Controller
             $post->restore();
 
             return back()->with('success', __('post.messages.restore_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to restore post', $th, [
                 'post_id' => $post->id,
             ]);
@@ -183,7 +190,7 @@ class PostController extends Controller
             });
 
             return back()->with('success', __('post.messages.force_delete_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to force delete post', $th, [
                 'post_id' => $post->id,
             ]);
@@ -201,11 +208,12 @@ class PostController extends Controller
         $newPost->excerpt = $post->excerpt;
         $newPost->content = $post->content;
         $newPost->category_id = $post->category_id;
-        // $newPost->tags()->sync($post->tags);
+        $newPost->tags()->sync($post->tags);
 
         return view('admin.posts.form', [
             'post' => $newPost,
-            'categoryOptions' => Category::options()->active()->get(),
+            'categories' => Category::options()->active()->get(),
+            'tags' => Tag::query()->options()->get(),
         ]);
     }
 

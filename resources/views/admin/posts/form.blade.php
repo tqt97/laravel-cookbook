@@ -50,7 +50,7 @@
                                     <x-forms.label name="category_id" :label="__('post.form.category_id')" required />
                                     <select name="category_id" id="category_id" class="form-select w-full mt-1">
                                         <option value="">{{ __('post.form.select_category') }}</option>
-                                        @foreach ($categoryOptions as $category)
+                                        @foreach ($categories as $category)
                                             <option value="{{ $category->id }}" {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}>
                                                 {{ $category->name }}
                                             </option>
@@ -72,19 +72,28 @@
                             </div>
 
                             {{-- Tags --}}
-                            {{-- <div class="flex gap-4 items-center">
+                            <div class="flex gap-4 items-center">
                                 <div class="mb-4 w-1/2">
                                     <x-forms.label name="tags" :label="__('post.form.tags')" />
+                                    {{-- <div class="flex items-center gap-2 mb-1">
+                                        <button type="button" onclick="clearTags()"
+                                            class="text-sm text-red-500 hover:underline">
+                                            {{ __('Bỏ chọn tất cả') }}
+                                        </button>
+                                    </div> --}}
                                     <select name="tags[]" id="tags" multiple class="form-multiselect w-full mt-1">
+                                        <option value="__none__">{{ __('post.form.select_tags') }}</option>
                                         @foreach ($tags as $tag)
-                                        <option value="{{ $tag->id }}" {{ in_array($tag->id, old('tags',
-                                            $post->tags->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>
-                                            {{ $tag->name }}
-                                        </option>
+                                            <option value="{{ $tag->id }}" {{ in_array($tag->id, old(
+                                                'tags',
+                                                $post->tags->pluck('id')->toArray() ?? []
+                                            )) ? 'selected' : '' }}>
+                                                {{ $tag->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
-                            </div> --}}
+                            </div>
 
                             {{-- Content --}}
                             <div class="flex gap-4 items-center">

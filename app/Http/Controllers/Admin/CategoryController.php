@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CategoryController extends Controller
 {
@@ -56,7 +57,7 @@ class CategoryController extends Controller
             Category::query()->create($request->validated());
 
             return to_route('admin.categories.index')->with('success', __('category.messages.create_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error($th->getMessage());
 
             return back()
@@ -85,7 +86,7 @@ class CategoryController extends Controller
             $category->update($request->validated());
 
             return to_route('admin.categories.index')->with('success', __('category.messages.update_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error($th->getMessage());
 
             return back()->with('error', __('category.messages.update_fail'));
@@ -101,7 +102,7 @@ class CategoryController extends Controller
             $category->delete();
 
             return to_route('admin.categories.index')->with('success', __('category.messages.delete_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error($th->getMessage());
 
             return back()->with('error', __('category.messages.delete_fail'));

@@ -32,6 +32,8 @@ class UpdatePostRequest extends FormRequest
             'is_featured' => ['required', 'boolean'],
             'is_published' => ['required', 'boolean'],
             'published_at' => ['nullable', 'date'],
+            'tags' => ['nullable', 'array', 'max:5'],
+            'tags.*' => ['bail', 'integer', 'exists:tags,id'],
         ];
     }
 
@@ -53,6 +55,17 @@ class UpdatePostRequest extends FormRequest
                 ! $this->post->is_published => now(),
                 default => $this->post->published_at,
             },
+            'tags' => $this->input('tags') ?? [],
         ]);
+    }
+
+    public function messages(): array
+    {
+        return [
+            'tags.max' => 'You can select a maximum of 5 tags.',
+            'tags.*.exists' => 'The selected tag does not exist.',
+            'tags.*.integer' => 'Each tag must be an integer ID.',
+            'slug.regex' => 'Slug only contains lowercase letters, numbers, hyphens (-) and underscores (_).',
+        ];
     }
 }

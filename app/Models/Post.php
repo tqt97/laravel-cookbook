@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
@@ -44,13 +45,12 @@ class Post extends Model
     protected static function boot(): void
     {
         parent::boot();
-        static::deleting(function (Post $post) {
-            if ($post->isForceDeleting()) {
-                $oldImage = $post->image_path;
+        static::forceDeleted(function (Post $post) {
+            $post->tags()->detach();
 
-                if ($oldImage && ! ImageHelper::delete($oldImage)) {
-                    throw new \RuntimeException("Delete image fail: {$oldImage}");
-                }
+            $oldImage = $post->image_path;
+            if ($oldImage && ! ImageHelper::delete($oldImage)) {
+                throw new \RuntimeException("Delete image fail: {$oldImage}");
             }
         });
     }
@@ -63,6 +63,11 @@ class Post extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
     }
 
     /**

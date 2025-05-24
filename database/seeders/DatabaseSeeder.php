@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +18,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         Category::factory()->count(100)->create();
+        Tag::factory()->count(50)->create();
 
         User::factory()->create([
             'name' => 'TuanTQ',
@@ -33,7 +35,12 @@ class DatabaseSeeder extends Seeder
                     ->create([
                         'user_id' => $user->id,
                         'category_id' => Category::active()->inRandomOrder()->first()->id,
-                    ]);
+                    ])
+                    ->each(function (Post $post) {
+                        $tagIds = Tag::inRandomOrder()->limit(rand(1, 5))->pluck('id');
+                        $post->tags()->sync($tagIds);
+                    });
+
             });
 
     }
