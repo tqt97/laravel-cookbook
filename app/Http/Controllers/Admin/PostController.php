@@ -9,6 +9,7 @@ use App\Http\Requests\Post\StorePostRequest;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Traits\HandlesBulkDeletion;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -29,6 +30,7 @@ class PostController extends Controller
         $status = $request->input('status');
         $posts = Post::query()
             ->with(['category:id,name', 'user:id,name'])
+            ->withCount('tags')
             ->status($status)
             ->search($search)
             ->latest()
@@ -47,7 +49,8 @@ class PostController extends Controller
     {
         return view('admin.posts.form', [
             'post' => new Post,
-            'categoryOptions' => Category::query()->active()->options()->get(),
+            'categories' => Category::query()->active()->options()->get(),
+            'tags' => Tag::query()->options()->get(),
         ]);
     }
 
@@ -68,7 +71,8 @@ class PostController extends Controller
             }
 
             DB::transaction(function () use ($data) {
-                Post::create($data);
+                $post = Post::create($data);
+                $post->tags()->sync($data['tags']);
             });
 
             return to_route('admin.posts.index')->with('success', __('post.messages.create_success'));
@@ -86,7 +90,8 @@ class PostController extends Controller
     {
         return view('admin.posts.form', [
             'post' => $post,
-            'categoryOptions' => Category::query()->active()->options()->get(),
+            'categories' => Category::query()->active()->options()->get(),
+            'tags' => Tag::query()->options()->get(),
         ]);
     }
 
@@ -114,6 +119,7 @@ class PostController extends Controller
                 if ($post->isDirty()) {
                     $post->save();
                 }
+                $post->tags()->sync($data['tags']);
 
                 if ($isNewImage && $oldImage) {
                     DB::afterCommit(function () use ($oldImage) {
@@ -201,11 +207,12 @@ class PostController extends Controller
         $newPost->excerpt = $post->excerpt;
         $newPost->content = $post->content;
         $newPost->category_id = $post->category_id;
-        // $newPost->tags()->sync($post->tags);
+        $newPost->tags()->sync($post->tags);
 
         return view('admin.posts.form', [
             'post' => $newPost,
-            'categoryOptions' => Category::options()->active()->get(),
+            'categories' => Category::options()->active()->get(),
+            'tags' => Tag::query()->options()->get(),
         ]);
     }
 

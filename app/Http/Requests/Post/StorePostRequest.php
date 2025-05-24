@@ -33,6 +33,8 @@ class StorePostRequest extends FormRequest
             'is_published' => ['required', 'boolean'],
             'published_at' => ['nullable', 'date'],
             'user_id' => ['required', 'integer', 'exists:users,id'],
+            'tags' => ['nullable', 'array', 'max:5'],
+            'tags.*' => ['bail', 'integer', 'exists:tags,id'],
         ];
     }
 
@@ -54,6 +56,17 @@ class StorePostRequest extends FormRequest
             'is_featured' => $this->boolean('is_featured'),
             'is_published' => $isPublished,
             'published_at' => $isPublished ? ($this->input('published_at') ?? now()) : null,
+            'tags' => $this->input('tags') ?? [],
         ]);
+    }
+
+    public function messages(): array
+    {
+        return [
+            'tags.max' => 'You can select a maximum of 5 tags.',
+            'tags.*.exists' => 'The selected tag does not exist.',
+            'tags.*.integer' => 'Each tag must be an integer ID.',
+            'slug.regex' => 'Slug only contains lowercase letters, numbers, hyphens (-) and underscores (_).',
+        ];
     }
 }

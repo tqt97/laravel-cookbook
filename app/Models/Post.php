@@ -45,13 +45,12 @@ class Post extends Model
     protected static function boot(): void
     {
         parent::boot();
-        static::deleting(function (Post $post) {
-            if ($post->isForceDeleting()) {
-                $oldImage = $post->image_path;
+        static::forceDeleted(function (Post $post) {
+            $post->tags()->detach();
 
-                if ($oldImage && ! ImageHelper::delete($oldImage)) {
-                    throw new \RuntimeException("Delete image fail: {$oldImage}");
-                }
+            $oldImage = $post->image_path;
+            if ($oldImage && ! ImageHelper::delete($oldImage)) {
+                throw new \RuntimeException("Delete image fail: {$oldImage}");
             }
         });
     }
