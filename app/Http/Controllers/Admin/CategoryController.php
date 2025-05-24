@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Category\BulkDeleteRequest;
+use App\Http\Requests\Category\BulkDeleteCategoryRequest;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Models\Category;
@@ -111,7 +111,7 @@ class CategoryController extends Controller
     /**
      * Remove multiple the specified resource from storage.
      */
-    public function bulkDelete(BulkDeleteRequest $request): RedirectResponse
+    public function bulkDelete(BulkDeleteCategoryRequest $request): RedirectResponse
     {
         return $this->performBulkDeletion($request, Category::class);
     }
