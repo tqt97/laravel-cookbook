@@ -11,6 +11,7 @@ use App\Traits\HandlesBulkDeletion;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class TagController extends Controller
 {
@@ -50,7 +51,7 @@ class TagController extends Controller
             Tag::query()->create($request->validated());
 
             return to_route('admin.tags.index')->with('success', __('tag.messages.create_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error($th->getMessage());
 
             return to_route('admin.tags.index')->with('error', __('tag.messages.create_fail'));
@@ -76,7 +77,7 @@ class TagController extends Controller
             $tag->update($request->validated());
 
             return to_route('admin.tags.index')->with('success', __('tag.messages.update_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error($th->getMessage());
 
             return to_route('admin.tags.index')->with('error', __('tag.messages.update_fail'));
@@ -92,7 +93,7 @@ class TagController extends Controller
             $tag->delete();
 
             return to_route('admin.tags.index')->with('success', __('tag.messages.delete_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::error($th->getMessage());
 
             return to_route('admin.tags.index')->with('error', __('tag.messages.delete_fail'));

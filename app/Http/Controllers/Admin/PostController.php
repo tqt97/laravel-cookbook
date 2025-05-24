@@ -16,6 +16,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class PostController extends Controller
 {
@@ -76,7 +77,7 @@ class PostController extends Controller
             });
 
             return to_route('admin.posts.index')->with('success', __('post.messages.create_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to create post', $th);
 
             return to_route('admin.posts.index')->with('error', __('post.messages.create_fail'));
@@ -131,7 +132,7 @@ class PostController extends Controller
             });
 
             return to_route('admin.posts.index')->with('success', __('post.messages.update_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to update post', $th, [
                 'post_id' => $post->id,
             ]);
@@ -149,7 +150,7 @@ class PostController extends Controller
             $post->delete();
 
             return back()->with('success', __('post.messages.delete_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to delete post', $th, [
                 'post_id' => $post->id,
             ]);
@@ -172,7 +173,7 @@ class PostController extends Controller
             $post->restore();
 
             return back()->with('success', __('post.messages.restore_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to restore post', $th, [
                 'post_id' => $post->id,
             ]);
@@ -189,7 +190,7 @@ class PostController extends Controller
             });
 
             return back()->with('success', __('post.messages.force_delete_success'));
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->logError('Failed to force delete post', $th, [
                 'post_id' => $post->id,
             ]);
