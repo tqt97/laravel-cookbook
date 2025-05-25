@@ -49,15 +49,6 @@ class CommentController extends Controller
 
     public function reply(ReplyCommentRequest $request, Comment $comment): JsonResponse|RedirectResponse
     {
-        // $request->validate([
-        //     'content' => 'required|string|max:1000',
-        // ]);
-        // $data = [
-        //     'user_id' => auth()->id(),
-        //     'post_id' => $comment->post_id,
-        //     'parent_id' => $comment->id,
-        //     'content' => $request->content,
-        // ];
         $reply = $comment->replies()->create($request->validated());
 
         if ($request->ajax()) {
