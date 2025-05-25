@@ -87,6 +87,8 @@
                                     <th class="px-4 py-4">{{ __('post.columns.category_id') }}</th>
                                     <th class="px-4 py-4">{{ __('post.columns.user_id') }}</th>
                                     <th class="px-4 py-4">{{ __('post.columns.tags') }}</th>
+                                    <th class="px-4 py-4">{{ __('post.columns.view_count') }}</th>
+                                    <th class="px-4 py-4">{{ __('post.columns.comments_count') }}</th>
                                     <th class="px-4 py-4 text-center">{{ __('post.columns.is_featured') }}</th>
                                     <th class="px-4 py-4 text-center">{{ __('post.columns.status') }}</th>
                                     <th class="px-4 py-4 text-center">{{ __('post.columns.published_at') }}</th>
@@ -108,6 +110,8 @@
                                         <td class="px-4 py-3">{{ $post->category->name }}</td>
                                         <td class="px-4 py-3">{{ $post->user->name }}</td>
                                         <td class="px-4 py-3">{{ $post->tags_count }}</td>
+                                        <td class="px-4 py-3">{{ $post->view_count }}</td>
+                                        <td class="px-4 py-3">{{ $post->comments_count }}</td>
                                         <td class="px-4 py-3 text-center">
                                             @if($post->is_featured)
                                                 <span class="bg-green-500 text-white py-1 px-2 rounded-full text-xs">
@@ -159,6 +163,10 @@
                                                     </button>
                                                 </form>
                                             @else
+                                                <a href="{{ route('posts.show', $post) }}"
+                                                    class="text-cyan-600 hover:text-cyan-800">
+                                                    Detail
+                                                </a>
                                                 <a href="{{ route('admin.posts.duplicate', $post) }}"
                                                     class="text-cyan-600 hover:text-cyan-800">
                                                     <x-icons.duplicate />

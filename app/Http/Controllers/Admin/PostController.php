@@ -30,8 +30,8 @@ class PostController extends Controller
         $search = $request->input('search');
         $status = $request->input('status');
         $posts = Post::query()
-            ->with(['category:id,name', 'user:id,name'])
-            ->withCount('tags')
+            ->with(['category:id,name', 'user:id,name', 'tags:id,name', 'comments:id'])
+            ->withCount(['tags', 'comments'])
             ->status($status)
             ->search($search)
             ->latest()
@@ -208,7 +208,6 @@ class PostController extends Controller
         $newPost->excerpt = $post->excerpt;
         $newPost->content = $post->content;
         $newPost->category_id = $post->category_id;
-        $newPost->tags()->sync($post->tags);
 
         return view('admin.posts.form', [
             'post' => $newPost,

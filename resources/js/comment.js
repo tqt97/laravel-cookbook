@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Hàm confirm trước khi xóa comment
     function confirmDelete() {
-        return confirm('Bạn có chắc muốn xóa comment này?');
+        return confirm('Are you sure you want to delete this comment?');
     }
 
     // Hàm show form (edit hoặc reply), ẩn tất cả các form còn lại
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const content = textarea.value.trim();
         if (!content) {
-            alert('Nội dung không được để trống');
+            alert('Content cannot be empty');
             return;
         }
 
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Ẩn form edit
             form.classList.remove('show');
 
-            alert('Cập nhật bình luận thành công!');
+            alert('Edit comment successfully');
         } catch (error) {
             alert(error.message);
             console.error('Edit comment error:', error);
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const content = textarea.value.trim();
 
         if (!content) {
-            alert('Nội dung trả lời không được để trống');
+            alert('Content cannot be empty');
             return;
         }
 
@@ -143,12 +143,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 form.reset();
                 form.classList.remove('show');
 
-                alert('Trả lời bình luận thành công!');
+                alert('Reply comment successfully');
             } else {
-                alert('Trả lời thất bại');
+                alert('Reply comment failed');
             }
         } catch (error) {
-            alert('Đã xảy ra lỗi khi trả lời bình luận');
+            alert('An error occurred while replying to the comment');
             console.error('Reply comment error:', error);
         }
     });
@@ -172,12 +172,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.success) {
                 // Xóa phần tử comment trên DOM
                 form.closest('article').remove();
-                alert('Xóa bình luận thành công!');
+                alert('Delete comment successfully');
             } else {
-                alert('Xóa thất bại');
+                alert('Delete comment failed');
             }
         } catch (error) {
-            alert('Đã xảy ra lỗi khi xóa bình luận');
+            alert('An error occurred while deleting the comment');
             console.error('Delete comment error:', error);
         }
     });

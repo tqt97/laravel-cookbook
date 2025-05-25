@@ -25,6 +25,7 @@ return [
         'image' => 'Image',
         'tags' => 'Tags',
         'no_select_tags' => 'No select tags',
+        'select_tags' => 'Select tags',
     ],
     'columns' => [
         'id' => 'ID',
@@ -39,6 +40,8 @@ return [
         'image' => 'Image',
         'status' => 'Status',
         'tags' => 'Tags',
+        'view_count' => 'Views',
+        'comments_count' => 'Comments',
     ],
     'messages' => [
         'create_success' => 'Post created successfully',
