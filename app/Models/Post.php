@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,12 +31,14 @@ class Post extends Model
         'is_featured',
         'is_published',
         'published_at',
+        'view_count',
     ];
 
     protected $casts = [
         'is_featured' => 'boolean',
         'is_published' => 'boolean',
         'published_at' => 'datetime',
+        'view_count' => 'integer',
     ];
 
     public function getRouteKeyName(): string
@@ -74,6 +77,16 @@ class Post extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeable');
+    }
+
+    public function likedBy(User $user): bool
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
     }
 
     /**
