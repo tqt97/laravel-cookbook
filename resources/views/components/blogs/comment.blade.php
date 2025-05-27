@@ -21,7 +21,7 @@
             Reply
         </button>
 
-        @if (auth()->id() === $comment->user_id || auth()->user()?->isAdmin())
+        @if (auth()?->id() === $comment->user_id || auth()->user()?->isAdmin())
             <button type="button" data-action="edit" data-id="{{ $comment->id }}" class="hover:underline">
                 Edit
             </button>
@@ -32,7 +32,7 @@
                 @method('DELETE')
                 <button type="submit" class="text-red-600 hover:underline">Delete</button>
             </form>
-
+        @else
             <a href="#" class="hover:underline">Report</a>
         @endif
     </div>
