@@ -33,7 +33,7 @@
                     class="flex items-center gap-1">
                     @csrf
                     <button type="submit" class="flex items-center gap-1">
-                        @if($post->likedBy(auth()->user()))
+                        @if(auth()->check() && (bool)$post->likedBy(auth()?->user()))
                             <x-icons.heart class="text-red-500 fill-red-500" /> unlike
                         @else
                             <x-icons.heart /> like
