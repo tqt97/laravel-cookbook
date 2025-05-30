@@ -12,4 +12,6 @@ return [
     'categories' => 'Categories',
     'posts' => 'Posts',
     'tags' => 'Tags',
+    'roles' => 'Roles',
+    'permissions' => 'Permissions',
 ];

@@ -8,7 +8,10 @@ use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,11 +23,22 @@ class DatabaseSeeder extends Seeder
         Category::factory()->count(100)->create();
         Tag::factory()->count(50)->create();
 
-        User::factory()->create([
+        Artisan::call('permissions:generate-all');
+        $superAdmin = User::factory()->create([
             'name' => 'TuanTQ',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('12341234'),
         ]);
+        $roleList = config('role.default');
+        foreach ($roleList as $role) {
+            Role::create(['name' => $role]);
+        }
+        $superAdminRole = Role::where('name', 'admin')->first();
+        // sync permissions
+        $allPermissions = Permission::all();
+        $superAdminRole->syncPermissions($allPermissions);
+
+        $superAdmin->assignRole($superAdminRole);
 
         User::factory()
             ->count(10)

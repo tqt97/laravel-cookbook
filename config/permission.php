@@ -199,4 +199,21 @@ return [
 
         'store' => 'default',
     ],
+
+    // custom list by tuantq
+    'permissions_list' => [
+        'view',
+        'create',
+        'edit',
+        'update',
+        'delete',
+        'restore',
+        'force-delete',
+        'approve',
+        'publish',
+        'unpublish',
+        'export',
+        'import',
+        'assign',
+    ],
 ];

@@ -32,7 +32,7 @@
                                     <div class="mb-4 w-full">
                                         <x-forms.label name="name" :label="__('tag.form.name')" required />
                                         <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
-                                            value="{{  old('title', $tag->name) }}" required />
+                                            value="{{  old('name', $tag->name) }}" required />
                                     </div>
                                 </div>
                                 <div>

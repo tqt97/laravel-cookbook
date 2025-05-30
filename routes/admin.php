@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\TagController;
+use App\Models\Permission;
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin.'], function () {
     // category
@@ -22,4 +25,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin.'], 
     Route::get('/tags/{tag}/duplicate', [TagController::class, 'duplicate'])->name('tags.duplicate');
     Route::delete('tags/bulk-delete', [TagController::class, 'bulkDelete'])->name('tags.bulk-delete');
     Route::resource('tags', TagController::class)->except('show');
+
+    // role
+    Route::resource('roles', RoleController::class)->except('show');
+
+    // permission
+    Route::resource('permissions', PermissionController::class)->except('show');
 });
