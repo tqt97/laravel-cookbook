@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Role\BulkDeleteRoleRequest;
 use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Traits\HandlesBulkDeletion;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +17,8 @@ use Throwable;
 
 class RoleController extends Controller
 {
+    use HandlesBulkDeletion;
+
     /**
      * Display a listing of the resource.
      */
@@ -120,5 +124,13 @@ class RoleController extends Controller
 
             return back()->with('error', __('role.messages.delete_fail'));
         }
+    }
+
+    /**
+     * Remove multiple the specified resource from storage.
+     */
+    public function bulkDelete(BulkDeleteRoleRequest $request): RedirectResponse
+    {
+        return $this->performBulkDeletion($request, Role::class);
     }
 }

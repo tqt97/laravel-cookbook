@@ -21,7 +21,7 @@
                     <div class="flex mt-5 items-center justify-between">
                         {{-- Bulk delete --}}
                         <div class="flex items-center gap-1">
-                            {{-- <form id="bulk-delete-form" method="POST" action="{{ route('admin.permissions.bulk-delete') }}">
+                            <form id="bulk-delete-form" method="POST" action="{{ route('admin.permissions.bulk-delete') }}">
                                 @csrf
                                 @method('DELETE')
                                 <div id="bulk-delete-inputs"></div>
@@ -32,7 +32,7 @@
                                     onclick="return confirm('{{ __('Bulk delete') }}')">
                                     {{ __('common.bulk_delete') }}
                                 </x-primary-button>
-                            </form> --}}
+                            </form>
                             <div id="selected-count" class="text-gray-700" style="display: none;">
                                 {{ __('common.select') }}
                                 <strong id="selected-count-number"></strong>
@@ -116,4 +116,7 @@
             </div>
         </div>
     </div>
+        @push('js')
+        @vite('resources/js/admin/tags/index.js')
+    @endpush
 </x-app-layout>

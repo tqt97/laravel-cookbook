@@ -27,8 +27,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'], 'as' => 'admin.'], 
     Route::resource('tags', TagController::class)->except('show');
 
     // role
+    Route::delete('roles/bulk-delete', [RoleController::class, 'bulkDelete'])->name('roles.bulk-delete');
     Route::resource('roles', RoleController::class)->except('show');
 
     // permission
+    Route::delete('permissions/bulk-delete', [PermissionController::class, 'bulkDelete'])->name('permissions.bulk-delete');
     Route::resource('permissions', PermissionController::class)->except('show');
 });

@@ -3,15 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Permission\BulkDeletePermissionRequest;
 use App\Http\Requests\Permission\StorePermissionRequest;
 use App\Http\Requests\Permission\UpdatePermissionRequest;
 use App\Models\Permission;
+use App\Traits\HandlesBulkDeletion;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class PermissionController extends Controller
 {
+    use HandlesBulkDeletion;
+
     /**
      * Display a listing of the resource.
      */
@@ -36,7 +41,7 @@ class PermissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePermissionRequest $request)
+    public function store(StorePermissionRequest $request): RedirectResponse
     {
         try {
             Permission::query()->create($request->validated());
@@ -52,7 +57,7 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Permission $permission)
+    public function edit(Permission $permission): View
     {
         return view('admin.permissions.form', ['permission' => $permission]);
     }
@@ -60,7 +65,7 @@ class PermissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePermissionRequest $request, Permission $permission)
+    public function update(UpdatePermissionRequest $request, Permission $permission): RedirectResponse
     {
         try {
             $permission->update($request->validated());
@@ -76,7 +81,7 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Permission $permission)
+    public function destroy(Permission $permission): RedirectResponse
     {
         try {
             $permission->delete();
@@ -87,5 +92,13 @@ class PermissionController extends Controller
 
             return back()->with('error', __('permission.messages.delete_fail'));
         }
+    }
+
+    /**
+     * Remove multiple the specified resource from storage.
+     */
+    public function bulkDelete(BulkDeletePermissionRequest $request): RedirectResponse
+    {
+        return $this->performBulkDeletion($request, Permission::class);
     }
 }
