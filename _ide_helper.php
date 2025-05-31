@@ -24167,6 +24167,25 @@ namespace Illuminate\Support {
         }
 
             }
+    /**
+     * 
+     *
+     */
+    class Str {
+        /**
+         * 
+         *
+         * @see \App\Providers\AppServiceProvider::boot()
+         * @param string $subject
+         * @param mixed $wordsPerMinute
+         * @static 
+         */
+        public static function readingTime($subject, $wordsPerMinute = 200)
+        {
+            return \Illuminate\Support\Str::readingTime($subject, $wordsPerMinute);
+        }
+
+            }
     }
 
 namespace Illuminate\Http {
@@ -24269,6 +24288,30 @@ namespace Illuminate\Routing {
         public static function lazy($enabled = true)
         {
             return \Illuminate\Routing\Route::lazy($enabled);
+        }
+
+        /**
+         * 
+         *
+         * @see \Spatie\Permission\PermissionServiceProvider::registerMacroHelpers()
+         * @param mixed $roles
+         * @static 
+         */
+        public static function role($roles = [])
+        {
+            return \Illuminate\Routing\Route::role($roles);
+        }
+
+        /**
+         * 
+         *
+         * @see \Spatie\Permission\PermissionServiceProvider::registerMacroHelpers()
+         * @param mixed $permissions
+         * @static 
+         */
+        public static function permission($permissions = [])
+        {
+            return \Illuminate\Routing\Route::permission($permissions);
         }
 
             }
