@@ -44,7 +44,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         $this->merge([
             'slug' => $this->input('slug') ?: Str::slug($this->input('name')),
-            'position' => $this->input('position') ?? 0,
+            'position' => $this->input('position', 0),
             'is_active' => $this->boolean('is_active'),
         ]);
     }

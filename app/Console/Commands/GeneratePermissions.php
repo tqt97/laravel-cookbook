@@ -83,7 +83,7 @@ class GeneratePermissions extends Command
         foreach ($models as $index => $model) {
             $bar->advance();
 
-            if (Permission::where('name', 'LIKE', "{$model}.%")->exists()) {
+            if (Permission::whereLike('name', "{$model}.%")->exists()) {
                 $this->warn("🟡 Permissions for {$model} already exist. Skipping...\n");
             } else {
                 $this->call('permissions:generate', ['model' => $model]);

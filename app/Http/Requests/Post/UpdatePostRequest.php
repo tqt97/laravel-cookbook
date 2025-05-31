@@ -55,7 +55,7 @@ class UpdatePostRequest extends FormRequest
                 ! $this->post->is_published => now(),
                 default => $this->post->published_at,
             },
-            'tags' => $this->input('tags') ?? [],
+            'tags' => $this->input('tags', []),
         ]);
     }
 

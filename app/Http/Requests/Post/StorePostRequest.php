@@ -55,8 +55,8 @@ class StorePostRequest extends FormRequest
             'user_id' => auth()->id(),
             'is_featured' => $this->boolean('is_featured'),
             'is_published' => $isPublished,
-            'published_at' => $isPublished ? ($this->input('published_at') ?? now()) : null,
-            'tags' => $this->input('tags') ?? [],
+            'published_at' => $isPublished ? ($this->input('published_at', now())) : null,
+            'tags' => $this->input('tags', []),
         ]);
     }
 

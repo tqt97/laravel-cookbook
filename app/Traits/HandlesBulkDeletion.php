@@ -53,7 +53,7 @@ trait HandlesBulkDeletion
     protected function resolveMessageKey(string $modelClass, string $suffix): string
     {
         $basename = class_basename($modelClass);
-        $key = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $basename));
+        $key = strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $basename));
 
         return "{$key}.messages.{$suffix}";
     }

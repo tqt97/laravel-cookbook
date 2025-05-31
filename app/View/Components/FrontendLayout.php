@@ -23,11 +23,14 @@ class FrontendLayout extends Component
      */
     public function render(): View|Closure|string
     {
+        // Get all tags with belonging posts
         $tags = Tag::query()
             ->withCount('posts')
             ->having('posts_count', '>', 0)
-            ->orderBy('posts_count', 'desc')
+            ->latest('posts_count')
             ->get();
+
+        // Get all categories with belonging posts and published posts
         $categories = Category::query()
             ->with(['posts' => fn ($q) => $q->published()])
             ->active()
@@ -35,7 +38,7 @@ class FrontendLayout extends Component
                 'posts as published_posts_count' => fn ($q) => $q->published(),
             ])
             ->having('published_posts_count', '>', 0)
-            ->orderBy('published_posts_count', 'desc')
+            ->latest('published_posts_count')
             ->get();
 
         return view(

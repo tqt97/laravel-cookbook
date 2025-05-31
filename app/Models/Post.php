@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Helpers\ImageHelper;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,13 +34,6 @@ class Post extends Model
         'is_published',
         'published_at',
         'view_count',
-    ];
-
-    protected $casts = [
-        'is_featured' => 'boolean',
-        'is_published' => 'boolean',
-        'published_at' => 'datetime',
-        'view_count' => 'integer',
     ];
 
     public function getRouteKeyName(): string
@@ -90,18 +85,20 @@ class Post extends Model
     }
 
     /**
-     * Get the URL of the image associated with this post, or a default
-     * placeholder image if no image is associated.
+     * An attribute to return image URL.
      */
-    public function getImageUrlAttribute(): ?string
+    protected function imageUrl(): Attribute
     {
-        return $this->image_path ? Storage::disk('public')->url($this->image_path) : asset('assets/images/no-image.png');
+        return Attribute::make(get: function () {
+            return $this->image_path ? Storage::disk('public')->url($this->image_path) : asset('assets/images/no-image.png');
+        });
     }
 
     /**
      * Scope the query to include soft deleted models or only the trashed ones.
      */
-    public function scopeStatus(Builder $query, ?string $status): Builder
+    #[Scope]
+    protected function status(Builder $query, ?string $status): Builder
     {
         return match ($status) {
             'trashed' => $query->onlyTrashed(),
@@ -113,7 +110,8 @@ class Post extends Model
     /**
      * Scope the query to include only featured posts.
      */
-    public function scopeFeatured(Builder $query): Builder
+    #[Scope]
+    protected function featured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
     }
@@ -121,7 +119,8 @@ class Post extends Model
     /**
      * Scope the query to include only published posts.
      */
-    public function scopePublished(Builder $query): Builder
+    #[Scope]
+    protected function published(Builder $query): Builder
     {
         return $query->where('is_published', true);
     }
@@ -131,7 +130,8 @@ class Post extends Model
      *
      * @param  string|null  $search  The search term to filter the query results by title.
      */
-    public function scopeSearch(Builder $query, $search): Builder
+    #[Scope]
+    protected function search(Builder $query, $search): Builder
     {
         return $query->when($search, function ($q) use ($search) {
             $q->whereLike('title', '%'.$search.'%');
@@ -146,10 +146,11 @@ class Post extends Model
      *                          - `category`: The category slug to filter the query results by category.
      *                          - `tag`: The tag slug to filter the query results by tag.
      */
-    public function scopeFilter(Builder $query, array $filters): Builder
+    #[Scope]
+    protected function filter(Builder $query, array $filters): Builder
     {
         return $query
-            ->when($filters['search'] ?? null, fn ($q, $search) => $q->where('title', 'like', "%$search%"))
+            ->when($filters['search'] ?? null, fn ($q, $search) => $q->whereLike('title', "%$search%"))
             ->when($filters['category'] ?? null, function ($q, $category) {
                 $q->whereHas('category', fn ($q) => $q->where('slug', $category));
             })
@@ -165,8 +166,24 @@ class Post extends Model
      *                              - `sort`: The column to sort by (default is 'created_at').
      *                              - `direction`: The direction of the sort, either 'asc' or 'desc' (default is 'desc').
      */
-    public function scopeSort(Builder $query, array $sortOptions): Builder
+    #[Scope]
+    protected function sort(Builder $query, array $sortOptions): Builder
     {
         return $query->orderBy($sortOptions['sort'] ?? 'created_at', $sortOptions['direction'] ?? 'desc');
+    }
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_featured' => 'boolean',
+            'is_published' => 'boolean',
+            'published_at' => 'datetime',
+            'view_count' => 'integer',
+        ];
     }
 }

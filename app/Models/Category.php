@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,8 +15,6 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'slug', 'parent_id', 'position', 'is_active'];
-
-    protected $casts = ['is_active' => 'boolean'];
 
     public function getRouteKeyName(): string
     {
@@ -40,20 +39,41 @@ class Category extends Model
     /**
      * Scope a query to only include active categories.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    public function scopeSearch(Builder $query, ?string $search): Builder
+    /**
+     * Scope a query to filter categories by a search term.
+     *
+     * @param  string|null  $search  The search term to filter the query results by name.
+     */
+    #[Scope]
+    protected function search(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function ($q) use ($search) {
             $q->whereLike('name', '%'.$search.'%');
         });
     }
 
-    public function scopeOptions(Builder $query): Builder
+    /**
+     * Scope a query to include only the necessary columns to generate a HTML select list.
+     */
+    #[Scope]
+    protected function options(Builder $query): Builder
     {
         return $query->select('id', 'name');
+    }
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return ['is_active' => 'boolean'];
     }
 }

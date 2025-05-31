@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
                         'category_id' => Category::active()->inRandomOrder()->first()->id,
                     ])
                     ->each(function (Post $post) {
-                        $tagIds = Tag::inRandomOrder()->limit(rand(1, 5))->pluck('id');
+                        $tagIds = Tag::inRandomOrder()->limit(random_int(1, 5))->pluck('id');
                         $post->tags()->sync($tagIds);
                     });
 

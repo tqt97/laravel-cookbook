@@ -34,7 +34,7 @@ class StoreCommentRequest extends FormRequest
         $this->merge([
             'user_id' => auth()->id(),
             'post_id' => $this->route('post')->id,
-            'parent_id' => $this->input('parent_id') ?? null,
+            'parent_id' => $this->input('parent_id'),
         ]);
     }
 }
