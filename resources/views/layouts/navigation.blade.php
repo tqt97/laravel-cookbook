@@ -25,6 +25,12 @@
                         <x-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">
                             {{ __('nav.tags') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.*')">
+                            {{ __('nav.roles') }}
+                        </x-nav-link>
+                            <x-nav-link :href="route('admin.permissions.index')" :active="request()->routeIs('admin.permissions.*')">
+                            {{ __('nav.permissions') }}
+                        </x-nav-link>
                     @endauth
                 </div>
             </div>

@@ -61,3 +61,13 @@ button.loading::after {
 @keyframes spinner {
   to { transform: rotate(360deg); }
 }
+
+.custom-checkbox:checked,
+.custom-checkbox:checked:hover,
+.custom-checkbox:checked:focus {
+    @apply bg-gray-800 border-transparent;
+}
+
+.custom-checkbox:indeterminate, .custom-checkbox:indeterminate:hover, .custom-checkbox:indeterminate:focus {
+    @apply bg-gray-800 border-transparent;
+}
