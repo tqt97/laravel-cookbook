@@ -4,14 +4,14 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Permission;
 use App\Models\Post;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         foreach ($roleList as $role) {
             Role::create(['name' => $role]);
         }
-        $superAdminRole = Role::where('name', 'admin')->first();
+        $superAdminRole = Role::query()->where('name', 'admin')->first();
         // sync permissions
         $allPermissions = Permission::all();
         $superAdminRole->syncPermissions($allPermissions);
@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
                         'category_id' => Category::active()->inRandomOrder()->first()->id,
                     ])
                     ->each(function (Post $post) {
-                        $tagIds = Tag::inRandomOrder()->limit(random_int(1, 5))->pluck('id');
+                        $tagIds = \App\Models\Tag::query()->inRandomOrder()->limit(random_int(1, 5))->pluck('id');
                         $post->tags()->sync($tagIds);
                     });
 

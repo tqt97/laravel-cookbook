@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Permission;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Permission;
 use Throwable;
 
 class GenerateModelPermissions extends Command
@@ -51,7 +51,7 @@ class GenerateModelPermissions extends Command
         $this->info("\n🚀 Generating permissions for `{$model}`...");
         $this->newLine();
 
-        if (Permission::whereLike('name', "{$model}.%")->exists()) {
+        if (Permission::query()->whereLike('name', "{$model}.%")->exists()) {
             $this->warn("🟡 Permissions for `{$model}` already exist. Skipping...\n");
             $this->newLine();
 
@@ -66,7 +66,7 @@ class GenerateModelPermissions extends Command
             DB::transaction(function () use ($permissions, $model, $bar) {
                 foreach ($permissions as $permission) {
                     $permissionName = "{$model}.{$permission}";
-                    Permission::firstOrCreate(['name' => $permissionName]);
+                    Permission::query()->firstOrCreate(['name' => $permissionName]);
                     $bar->advance();
                 }
             });

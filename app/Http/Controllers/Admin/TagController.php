@@ -22,7 +22,7 @@ class TagController extends Controller
      */
     public function index(): View
     {
-        $tags = Tag::withCount('posts')->latest()->paginate();
+        $tags = Tag::query()->withCount('posts')->latest()->paginate();
 
         return view('admin.tags.index', [
             'tags' => $tags,

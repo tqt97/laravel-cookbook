@@ -39,6 +39,7 @@ use RectorLaravel\Rector\MethodCall\ReverseConditionableMethodCallRector;
 use RectorLaravel\Rector\MethodCall\ValidationRuleArrayStringValueToArrayRector;
 use RectorLaravel\Rector\MethodCall\WhereToWhereLikeRector;
 use RectorLaravel\Rector\PropertyFetch\OptionalToNullsafeOperatorRector;
+use RectorLaravel\Rector\StaticCall\EloquentMagicMethodToQueryBuilderRector;
 use RectorLaravel\Set\LaravelLevelSetList;
 use RectorLaravel\Set\LaravelSetList;
 
@@ -97,6 +98,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(AbortIfRector::class);
     $rectorConfig->rule(UnifyModelDatesWithCastsRector::class);
     $rectorConfig->rule(ModelCastsPropertyToCastsMethodRector::class);
+    $rectorConfig->rule(EloquentMagicMethodToQueryBuilderRector::class);
     $rectorConfig->skip([
         StringToClassConstantRector::class,
         StringClassNameToClassConstantRector::class,

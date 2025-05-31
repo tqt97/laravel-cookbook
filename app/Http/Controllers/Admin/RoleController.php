@@ -25,7 +25,7 @@ class RoleController extends Controller
     public function index(): View
     {
         return view('admin.roles.index', [
-            'roles' => Role::withCount('permissions')->paginate(),
+            'roles' => Role::query()->withCount('permissions')->paginate(),
         ]);
     }
 
@@ -56,7 +56,7 @@ class RoleController extends Controller
             $role = Role::query()->create($data);
 
             if (! empty($data['permissions'])) {
-                $permissions = Permission::whereIn('id', $data['permissions'])->pluck('name')->toArray();
+                $permissions = \App\Models\Permission::query()->whereIn('id', $data['permissions'])->pluck('name')->toArray();
                 $role->syncPermissions($permissions);
             }
 
@@ -96,7 +96,7 @@ class RoleController extends Controller
             $role->update($data);
 
             if (! empty($data['permissions'])) {
-                $permissions = Permission::whereIn('id', $data['permissions'])->pluck('name')->toArray();
+                $permissions = \App\Models\Permission::query()->whereIn('id', $data['permissions'])->pluck('name')->toArray();
                 $role->syncPermissions($permissions);
             } else {
                 $role->syncPermissions([]);

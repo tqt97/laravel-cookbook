@@ -72,7 +72,7 @@ class PostController extends Controller
             }
 
             DB::transaction(function () use ($data) {
-                $post = Post::create($data);
+                $post = Post::query()->create($data);
                 $post->tags()->sync($data['tags']);
             });
 
