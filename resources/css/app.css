@@ -71,3 +71,23 @@ button.loading::after {
 .custom-checkbox:indeterminate, .custom-checkbox:indeterminate:hover, .custom-checkbox:indeterminate:focus {
     @apply bg-gray-800 border-transparent;
 }
+
+.custom-input {
+    @apply w-full mt-1 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm;
+}
+
+.th {
+    @apply px-3 py-2;
+}
+
+.th-center {
+    @apply px-3 py-2 text-center;
+}
+
+.td {
+    @apply px-3 py-1;
+}
+
+.td-center {
+    @apply px-3 py-1 text-center;
+}

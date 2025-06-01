@@ -1,47 +1,42 @@
 @php
     $isEdit = $tag->exists;
     $action = $isEdit ? route('admin.tags.update', $tag) : route('admin.tags.store');
-    $method = $isEdit ? 'PUT' : 'POST';
+    $method = $isEdit ? 'PUT' : 'tag';
+    $labelText = $isEdit ? 'common.edit' : 'common.create';
+    $title = $isEdit ? 'tag.pages.edit' : 'tag.pages.create';
+    $submitText = $isEdit ? 'common.update' : 'common.save';
 @endphp
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ $isEdit ? __('common.edit') : __('common.create') }}
-        </h2>
+
+<x-admin.pages.form>
+    <x-slot name="breadcrumb">
+        <x-breadcrumb :items="[
+        ['label' => 'tag.title', 'href' => route('admin.tags.index')],
+        ['label' => $labelText],
+    ]" />
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-xl font-bold mb-4">{{ __('tag.pages.create') }}</h2>
-                        <a href="{{ route('admin.tags.index') }}"
-                            class="px-4 py-[10px] text-sm bg-gray-800 hover:bg-gray-900 text-white rounded-md dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
-                            ← {{ __('common.back') }}
-                        </a>
-                    </div>
+    <x-slot name="headerPage">
+        <x-admin.commons.header-action :title="$title" :isBack="true" routeBack="admin.tags.index" />
+    </x-slot>
 
-                    <div class="bg-white border rounded-lg px-8 py-6 mx-auto my-8">
-                            <form method="POST" action="{{ $action }}">
-                                @if($isEdit)
-                                    @method('PUT')
-                                @endif
-                                @csrf
-                                <div class="flex gap-4 items-center">
-                                    <div class="mb-4 w-full">
-                                        <x-forms.label name="name" :label="__('tag.form.name')" required />
-                                        <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
-                                            value="{{  old('name', $tag->name) }}" required />
-                                    </div>
-                                </div>
-                                <div>
-                                    <x-primary-button type="submit">{{ __('common.save') }}</x-primary-button>
-                                </div>
-                            </form>
-                    </div>
-                </div>
+    <x-slot name="form">
+        <form method="POST" action="{{ $action }}">
+            @csrf
+            @if($isEdit)
+                @method('PUT')
+            @endif
+            <div class="mb-4">
+                <x-admin.forms.text-input name="name" label="{{ __('tag.form.name') }}" :value="$tag->name"
+                    :required="true" />
             </div>
-        </div>
-    </div>
-</x-app-layout>
+
+            <div class="mt-2">
+                <x-primary-button type="submit">{{ __($submitText) }}</x-primary-button>
+            </div>
+        </form>
+    </x-slot>
+
+    {{-- @push('js')
+        @vite('resources/js/admin/tags/edit.js')
+    @endpush --}}
+</x-admin.pages.form>

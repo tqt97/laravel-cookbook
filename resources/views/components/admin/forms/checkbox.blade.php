@@ -18,9 +18,9 @@
         id="{{ $inputId }}"
         value="1"
         {{ $isChecked }}
-        {{ $attributes->class(['mt-2 w-5 h-5 rounded-md border-gray-300 focus:ring focus:ring-indigo-500']) }}
+        {{ $attributes->class(['mt-1 w-5 h-5 rounded-md border-gray-300 focus:ring focus:ring-indigo-500']) }}
     >
     @if($label)
-        <label for="{{ $inputId }}" class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</label>
+        <label for="{{ $inputId }}" class="text-sm text-gray-700 dark:text-gray-300">{{ __($label) }}</label>
     @endif
 </div>

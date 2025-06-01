@@ -21,6 +21,9 @@ return [
         'select_parent' => 'Select parent',
         'category' => 'Category',
         'categories' => 'Categories',
+        'is_published' => 'Published',
+        'parent_id' => 'Parent',
+        'select_category' => 'Select category',
     ],
     'columns' => [
         'id' => 'ID',

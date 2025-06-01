@@ -16,6 +16,7 @@ return [
     'select' => 'Select',
     'items' => 'items',
     'bulk_delete' => 'Bulk delete',
+    'bulk_delete_confirm' => 'Are you sure to bulk delete ?',
     'list' => 'List',
     'confirm_delete' => 'Are you sure to delete ?',
     'store_success' => 'Create success',

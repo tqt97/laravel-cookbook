@@ -1,7 +1,7 @@
 @props(['group', 'permissions', 'selected' => []])
 
-<div class="mb-4 border rounded-lg p-3 shadow bg-white w-full mx-auto">
-    <label class="font-semibold text-lg flex items-center gap-2 mb-2 cursor-pointer">
+<div class="mb-2 border rounded-lg p-3 shadow bg-white w-full mx-auto">
+    <label class="font-semibold flex items-center gap-2 mb-2 cursor-pointer">
         <input
             type="checkbox"
             class="cursor-pointer group-checkbox custom-checkbox accent-gray-800 focus:outline-none focus:ring-0 focus:shadow-outline rounded"

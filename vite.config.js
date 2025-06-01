@@ -8,6 +8,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/js/admin/categories/index.js',
+                'resources/js/admin/pages/list.js',
             ],
             refresh: true,
         }),
