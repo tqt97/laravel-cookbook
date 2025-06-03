@@ -1,3 +1,93 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.flash-container {
+    position: fixed;
+    top: 20px;
+    right: 10px;
+    /* transform: translateX(-50%); */
+    z-index: 9999;
+    width: auto;
+    max-width: 90%;
+}
+
+.flash-enter {
+
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.4s ease;
+}
+
+.flash-leave {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.4s ease;
+}
+
+.slide-toggle {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.slide-toggle.show {
+    max-height: 500px;
+    height: auto;
+    opacity: 1;
+}
+
+button.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  position: relative;
+}
+
+button.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
+.custom-checkbox:checked,
+.custom-checkbox:checked:hover,
+.custom-checkbox:checked:focus {
+    @apply bg-gray-800 border-transparent;
+}
+
+.custom-checkbox:indeterminate, .custom-checkbox:indeterminate:hover, .custom-checkbox:indeterminate:focus {
+    @apply bg-gray-800 border-transparent;
+}
+
+.custom-input {
+    @apply w-full mt-1 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm;
+}
+
+.th {
+    @apply px-3 py-2;
+}
+
+.th-center {
+    @apply px-3 py-2 text-center;
+}
+
+.td {
+    @apply px-3 py-1;
+}
+
+.td-center {
+    @apply px-3 py-1 text-center;
+}
