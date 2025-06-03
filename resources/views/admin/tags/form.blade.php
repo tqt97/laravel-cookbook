@@ -35,8 +35,4 @@
             </div>
         </form>
     </x-slot>
-
-    {{-- @push('js')
-        @vite('resources/js/admin/tags/edit.js')
-    @endpush --}}
 </x-admin.pages.form>

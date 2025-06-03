@@ -70,7 +70,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="mt-2">
                 <x-primary-button type="submit">{{ __($submitText) }}</x-primary-button>
             </div>
@@ -78,6 +77,6 @@
     </x-slot>
 
     @push('js')
-        @vite('resources/js/admin/posts/edit.js')
+        @vite('resources/js/admin/posts/form.js')
     @endpush
 </x-admin.pages.form>
